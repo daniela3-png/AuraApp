@@ -41,7 +41,11 @@ public class MainActivity extends AppCompatActivity {
                                 "Perfil asignado. Enfoque: " + perfil.getEnfoquePedagogico(),
                                 Toast.LENGTH_LONG).show();
 
-                        // TODO: Aquí agregaremos más adelante el redireccionamiento a la pantalla principal
+                        // Redireccionamiento a la pantalla de Calendario
+                        android.content.Intent intent = new android.content.Intent(MainActivity.this, CalendarioActivity.class);
+                        startActivity(intent);
+                        finish(); // Cierra la pantalla actual
+
                         // o solicitar los datos del cuidador si la edad es < 14
                     } else {
                         Toast.makeText(MainActivity.this, "Edad no válida para el sistema", Toast.LENGTH_SHORT).show();

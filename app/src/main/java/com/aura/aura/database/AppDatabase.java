@@ -4,12 +4,15 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import com.aura.aura.models.Ciclo;
 import com.aura.aura.models.Usuario;
 
-@Database(entities = {Usuario.class}, version = 1, exportSchema = false)
+// Agregamos Ciclo.class a las entidades
+@Database(entities = {Usuario.class, Ciclo.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();
+    public abstract CicloDao cicloDao(); // Nuevo DAO agregado
 
     private static volatile AppDatabase INSTANCIA;
 
