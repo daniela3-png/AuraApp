@@ -9,11 +9,15 @@ public class Usuario {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    public String nombre;
     public int edad;
+    public String tipoPerfil;
 
-    public String tipoPerfil; // Guardaremos si es Infantil, Adolescente o Adulto
+    // Nuevos campos
+    public String contactoEmergencia;
+    public String nombreTutor; // Solo si aplica
+    public String pinSeguridad; // Para un inicio de sesión básico local
 
-    // Constructor vacío requerido por Room
     public Usuario() {
     }
 }
