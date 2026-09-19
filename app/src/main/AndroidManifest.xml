@@ -28,6 +28,7 @@
         <activity android:name=".ui.CalendarioActivity" />
         <activity android:name=".ui.EducacionActivity" />
         <activity android:name=".ui.EmergenciaActivity" />
+        <activity android:name=".ui.RedApoyoActivity" />
     </application>
 
 </manifest>

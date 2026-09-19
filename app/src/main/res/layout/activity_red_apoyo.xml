@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#F3F9FF">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Red de Apoyo Asistencial"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#0277BD"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Espacios Amigables - Región de Tarapacá"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Orientación confidencial y gratuita en tu CESFAM local:"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"/>
+
+    <ListView
+        android:id="@+id/lvCentrosAsistenciales"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#E0E0E0"
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnGuiaFamiliar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ver Guía de Acompañamiento Familiar"
+        android:backgroundTint="#0277BD"/>
+</LinearLayout>
