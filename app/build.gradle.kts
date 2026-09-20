@@ -44,4 +44,6 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("androidx.biometric:biometric:1.1.0")
+    implementation("net.zetetic:android-database-sqlcipher:4.5.4")
+    implementation("androidx.sqlite:sqlite:2.4.0")
 }
