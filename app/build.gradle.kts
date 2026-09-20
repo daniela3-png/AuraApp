@@ -43,4 +43,5 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("androidx.biometric:biometric:1.1.0")
 }
