@@ -1,59 +1,86 @@
 package com.aura.aura.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.cardview.widget.CardView;
 import com.aura.aura.R;
 import com.aura.aura.factory.PerfilFactory;
 import com.aura.aura.models.PerfilUsuario;
-import java.util.List;
+import com.aura.aura.models.TemaEducativo;
 
 public class EducacionActivity extends AppCompatActivity {
 
-    private TextView tvEnfoquePedagogico;
-    private ListView lvTemas;
-    private Button btnIrCitas;
-    private PerfilUsuario perfilActual;
+    private TextView tvEnfoque, tvAcompanamiento, tvSoporte, tvCuandoConsultar;
+    private LinearLayout layoutTarjetasEducativas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_educacion);
 
-        tvEnfoquePedagogico = findViewById(R.id.tvEnfoquePedagogico);
-        lvTemas = findViewById(R.id.lvTemas);
-        btnIrCitas = findViewById(R.id.btnIrCitas);
+        tvEnfoque = findViewById(R.id.tvEnfoque);
+        tvAcompanamiento = findViewById(R.id.tvAcompanamiento);
+        tvSoporte = findViewById(R.id.tvSoporte);
+        tvCuandoConsultar = findViewById(R.id.tvCuandoConsultar);
+        layoutTarjetasEducativas = findViewById(R.id.layoutTarjetasEducativas);
 
-        // Simularemos que recuperamos la edad de la base de datos (por ahora pondremos 15 como ejemplo)
-        // TODO: Leer la edad real desde la base de datos Room (AppDatabase)
-        int edadUsuaria = 15;
+        // Recibir la edad desde el Dashboard (por defecto 22 si no llega nada)
+        int edad = getIntent().getIntExtra("EDAD_USUARIA", 22);
 
-        // Aquí ocurre la magia del Factory: obtenemos el perfil correcto
-        perfilActual = PerfilFactory.crearPerfil(edadUsuaria);
+        // Crear el perfil dinámico según la edad
+        PerfilUsuario perfil = PerfilFactory.crearPerfil(edad);
 
-        if (perfilActual != null) {
-            cargarDatosEnPantalla();
+        // Poblar la interfaz con los datos seguros de la clase
+        tvEnfoque.setText("Perfil Activo: " + perfil.getNombrePerfil() + "\n" + perfil.getEnfoque());
+        tvAcompanamiento.setText(perfil.getAcompanamiento());
+        tvSoporte.setText(perfil.getSoporte());
+        tvCuandoConsultar.setText(perfil.getCuandoConsultar());
+
+        // Generar las tarjetas del menú educativo dinámicamente
+        for (TemaEducativo tema : perfil.getMenu()) {
+            crearTarjetaEducativa(tema.titulo, tema.detalle);
         }
     }
 
-    private void cargarDatosEnPantalla() {
-        tvEnfoquePedagogico.setText(perfilActual.getEnfoquePedagogico());
+    private void crearTarjetaEducativa(String titulo, String detalle) {
+        // Creamos la tarjeta (CardView)
+        CardView card = new CardView(this);
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        cardParams.setMargins(0, 0, 0, 24);
+        card.setLayoutParams(cardParams);
+        card.setRadius(16f);
+        card.setCardElevation(4f);
+        card.setCardBackgroundColor(Color.WHITE);
 
-        // Llenar la lista con los temas habilitados para esta edad
-        List<String> temas = perfilActual.getTemasHabilitados();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, temas);
-        lvTemas.setAdapter(adapter);
+        // Contenedor interno
+        LinearLayout innerLayout = new LinearLayout(this);
+        innerLayout.setOrientation(LinearLayout.VERTICAL);
+        innerLayout.setPadding(32, 32, 32, 32);
 
-        // Ocultar o mostrar el botón de citas médicas según las reglas de negocio
-        if (perfilActual.isModuloCitasHabilitado()) {
-            btnIrCitas.setVisibility(View.VISIBLE);
-        } else {
-            btnIrCitas.setVisibility(View.GONE);
-        }
+        // Título
+        TextView tvTitulo = new TextView(this);
+        tvTitulo.setText(titulo);
+        tvTitulo.setTextSize(16f);
+        tvTitulo.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvTitulo.setTextColor(Color.parseColor("#5E35B1"));
+        tvTitulo.setPadding(0, 0, 0, 8);
+
+        // Detalle
+        TextView tvDetalle = new TextView(this);
+        tvDetalle.setText(detalle);
+        tvDetalle.setTextSize(14f);
+        tvDetalle.setTextColor(Color.parseColor("#757575"));
+
+        innerLayout.addView(tvTitulo);
+        innerLayout.addView(tvDetalle);
+        card.addView(innerLayout);
+
+        // Añadir la tarjeta completa al layout principal
+        layoutTarjetasEducativas.addView(card);
     }
 }

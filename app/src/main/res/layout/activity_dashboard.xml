@@ -122,7 +122,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- TARJETA 3: AGENDA (Calendario) -->
+        <!-- TARJETA 3: MI AGENDA DE AUTOCUIDADO (Calendario Integrado) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,20 +144,160 @@
                     android:textColor="@color/purple_primary"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendario del Ciclo Menstrual"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/etFechaInicioDashboard"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_border"
+                        android:hint="Inicio (Clic)"
+                        android:textAlignment="center"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:layout_marginEnd="8dp"/>
+
+                    <EditText
+                        android:id="@+id/etFechaFinDashboard"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_border"
+                        android:hint="Término (Clic)"
+                        android:textAlignment="center"
+                        android:focusable="false"
+                        android:clickable="true"/>
+                </LinearLayout>
 
                 <Button
-                    android:id="@+id/btnIrCalendario"
+                    android:id="@+id/btnGuardarCicloDashboard"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:text="Abrir Calendario Menstrual"
+                    android:text="Guardar Ciclo Menstrual"
                     android:textColor="@color/purple_primary"
                     android:backgroundTint="@color/purple_light"
-                    app:cornerRadius="8dp"/>
+                    app:cornerRadius="8dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Contenedor del Historial de Ciclos -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HISTORIAL DE REGISTROS"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutHistorialCiclos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- Los registros aparecerán aquí dinámicamente -->
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- TARJETA 4: ORIENTACIÓN TERRITORIAL -->
+        <!-- TARJETA 4: AGENDA MÉDICA PREVENTIVA -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAgendaMedica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#FFF0F5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agenda Médica Preventiva (CESFAM)"
+                    android:textColor="@color/red_panic"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/etFechaCita"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_border"
+                        android:hint="Fecha (Clic)"
+                        android:textAlignment="center"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:layout_marginEnd="8dp"/>
+
+                    <EditText
+                        android:id="@+id/etEspecialidad"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/edittext_border"
+                        android:hint="Ej: Matrona"
+                        android:paddingStart="8dp"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnAgendarCita"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:text="Agendar Nueva Cita"
+                    android:textColor="@color/red_panic"
+                    android:backgroundTint="@color/red_panic_light"
+                    app:cornerRadius="8dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Contenedor de Próximas Citas -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRÓXIMAS CITAS AGENDADAS"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/red_panic"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutCitasAgendadas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- Las citas aparecerán aquí dinámicamente -->
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- TARJETA 5: ORIENTACIÓN TERRITORIAL (Red de Apoyo) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

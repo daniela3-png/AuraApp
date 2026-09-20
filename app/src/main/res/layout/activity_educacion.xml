@@ -1,51 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
+    android:background="@color/background_light"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Módulo Educativo"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#800080"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:id="@+id/tvEnfoquePedagogico"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enfoque Pedagógico:"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        android:layout_marginBottom="24dp"/>
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Temas Habilitados para ti:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Módulos de Educación Sexual Integral"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_primary"
+            android:layout_marginBottom="8dp"/>
 
-    <ListView
-        android:id="@+id/lvTemas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="16dp"/>
+        <TextView
+            android:id="@+id/tvEnfoque"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enfoque..."
+            android:textSize="14sp"
+            android:textColor="@color/text_gray"
+            android:layout_marginBottom="24dp"/>
 
-    <Button
-        android:id="@+id/btnIrCitas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Agendar Cita Médica"
-        android:backgroundTint="#800080"
-        android:visibility="gone"/>
-    <!-- Inicialmente oculto (gone), lo mostraremos sólo si el perfil lo permite -->
+        <!-- Contenedor donde inyectaremos las tarjetas de los temas dinámicamente -->
+        <LinearLayout
+            android:id="@+id/layoutTarjetasEducativas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+        <!-- SECCIÓN: ACOMPAÑAMIENTO -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="#FFF3E0"
+            app:cardElevation="0dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvAcompanamiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="#E65100"
+                android:text="Acompañamiento..."/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- SECCIÓN: ORIENTACIÓN TERRITORIAL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orientación Territorial"
+            android:textStyle="bold"
+            android:textColor="@color/purple_primary"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvSoporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Soporte..."
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cuándo consultar:"
+            android:textStyle="bold"
+            android:textColor="@color/red_panic"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvCuandoConsultar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cuando..."
+            android:textSize="14sp"
+            android:layout_marginBottom="32dp"/>
+
+    </LinearLayout>
+</ScrollView>

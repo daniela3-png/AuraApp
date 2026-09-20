@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                         "¡Bienvenida de nuevo, " + nombre + "!", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                intent.putExtra("NOMBRE_USUARIA", nombre);
                 startActivity(intent);
                 finish();
             }
