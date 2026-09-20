@@ -1,55 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="#FDF8FF">
+    android:background="@color/background_light"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tvBienvenida"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hola, Bienvenida"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#800080"
-        android:layout_marginBottom="32dp"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnIrCalendario"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Mi Calendario Menstrual"
-        android:backgroundTint="#AB47BC"
-        android:layout_marginBottom="16dp"/>
+        <!-- ENCABEZADO -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp">
 
-    <Button
-        android:id="@+id/btnIrEducacion"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Módulo Educativo"
-        android:backgroundTint="#AB47BC"
-        android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/tvBienvenida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hola, Usuaria"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_primary"
+                android:layout_centerVertical="true"/>
 
-    <Button
-        android:id="@+id/btnIrRedApoyo"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Red de Apoyo Local"
-        android:backgroundTint="#AB47BC"
-        android:layout_marginBottom="48dp"/>
+            <Button
+                android:id="@+id/btnCerrarSesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Cerrar Sesión"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/red_panic"
+                app:cornerRadius="20dp"
+                android:textSize="12sp"
+                android:minHeight="36dp"/>
+        </RelativeLayout>
 
-    <!-- Botón SOS siempre visible en el menú principal -->
-    <Button
-        android:id="@+id/btnIrEmergencia"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="🚨 BOTÓN DE PÁNICO SOS"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#D32F2F"/>
+        <!-- TARJETA 1: EMERGENCIA (Prioridad en móvil va arriba) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/white">
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Módulo de Emergencia"
+                    android:textColor="@color/red_panic"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Si te sientes insegura, presiona este botón para notificar tu ubicación."
+                    android:textSize="13sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnIrEmergencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="🚨 BOTÓN DE PÁNICO"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/red_panic"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- TARJETA 2: EDUCACIÓN -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Educación Sexual Integral"
+                    android:textColor="@color/purple_primary"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnIrEducacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:text="Ver Módulos Educativos"
+                    android:textColor="@color/purple_primary"
+                    android:backgroundTint="@color/purple_light"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- TARJETA 3: AGENDA (Calendario) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mi Agenda de Autocuidado"
+                    android:textColor="@color/purple_primary"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnIrCalendario"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:text="Abrir Calendario Menstrual"
+                    android:textColor="@color/purple_primary"
+                    android:backgroundTint="@color/purple_light"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- TARJETA 4: ORIENTACIÓN TERRITORIAL -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Orientación Territorial"
+                    android:textColor="@color/purple_primary"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnIrRedApoyo"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:text="Ver Red de Salud Local"
+                    android:textColor="@color/purple_primary"
+                    android:backgroundTint="@color/purple_light"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>
