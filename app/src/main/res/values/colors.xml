@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Paleta principal de Aura -->
+    <color name="purple_primary">#5E35B1</color> <!-- Morado principal -->
+    <color name="purple_dark">#4527A0</color>
+    <color name="purple_light">#D1C4E9</color>
+    <color name="background_light">#F5EFF9</color> <!-- Fondo claro sutil -->
+
+    <color name="white">#FFFFFF</color>
+    <color name="text_dark">#333333</color>
+    <color name="text_gray">#757575</color>
+
+    <!-- Colores para el Botón SOS y Alertas -->
+    <color name="red_panic">#D32F2F</color>
+    <color name="red_panic_light">#FFEBEE</color>
 </resources>

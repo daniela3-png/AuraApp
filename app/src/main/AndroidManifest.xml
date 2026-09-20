@@ -15,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aura">
+
         <activity
-            android:name=".ui.RegistroActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +25,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.RegistroActivity" />
         <activity android:name=".ui.MainActivity" />
         <activity android:name=".ui.CalendarioActivity" />
         <activity android:name=".ui.EducacionActivity" />
