@@ -15,67 +15,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Módulo de Emergencia"
+            android:text="Círculo de Cuidado"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/red_panic"
+            android:textColor="@color/purple_primary"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conoce tus redes de apoyo y las herramientas de seguridad de tu teléfono."
+            android:textSize="14sp"
+            android:textColor="@color/text_gray"
             android:layout_marginBottom="24dp"/>
 
-        <!-- TARJETA 1: BOTÓN DE PÁNICO DE AURA -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@color/white">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Notificar a mi Tutor"
-                    android:textColor="@color/red_panic"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Envía un SMS con tu ubicación actual al número de tu apoderado o contacto de confianza."
-                    android:textSize="14sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/text_gray"
-                    android:layout_marginBottom="24dp"/>
-
-                <Button
-                    android:id="@+id/btnEnviarAlerta"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:text="🚨 ENVIAR ALERTA"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/red_panic"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    app:cornerRadius="35dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- TARJETA 2: EDUCACIÓN SOS NATIVO DE ANDROID -->
+        <!-- TARJETA 1: LÍNEAS DE APOYO OFICIAL -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="#FFF0F5"> <!-- Fondo rojo muy claro/rosado -->
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,7 +47,62 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💡 Atajo con Pantalla Bloqueada"
+                    android:text="Líneas de Apoyo Nacional"
+                    android:textColor="@color/purple_primary"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnFonoMujer"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="1455 - Orientación Violencia Mujer"
+                    android:textColor="@color/white"
+                    android:backgroundTint="#D81B60"
+                    android:layout_marginBottom="8dp"
+                    app:cornerRadius="8dp"/>
+
+                <Button
+                    android:id="@+id/btnFonoNinos"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="147 - Fono Niños (Carabineros)"
+                    android:textColor="@color/white"
+                    android:backgroundTint="#00897B"
+                    android:layout_marginBottom="8dp"
+                    app:cornerRadius="8dp"/>
+
+                <Button
+                    android:id="@+id/btnFonoSuicidio"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="*4141 - Prevención y Salud Mental"
+                    android:textColor="@color/white"
+                    android:backgroundTint="#3949AB"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- TARJETA 2: EDUCACIÓN SOS NATIVO DE ANDROID -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="#FFF0F5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡 Alerta Rápida SOS (Android)"
                     android:textColor="@color/red_panic"
                     android:textStyle="bold"
                     android:textSize="16sp"
@@ -95,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tu celular tiene una función de emergencia oculta. No necesitas abrir Aura ni desbloquear la pantalla para pedir ayuda rápida."
+                    android:text="Tu celular tiene una función de emergencia invencible. No necesitas abrir Aura ni desbloquear la pantalla para pedir ayuda."
                     android:textSize="14sp"
                     android:textColor="@color/text_gray"
                     android:layout_marginBottom="12dp"/>
@@ -103,7 +119,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1. Presiona el botón de encendido de tu celular 5 veces seguidas rápidamente.\n2. Esto activará el 'SOS de Emergencia' del sistema.\n3. Configura tus contactos de emergencia en los Ajustes generales de tu teléfono."
+                    android:text="1. Presiona el botón de encendido de tu celular 5 veces seguidas rápidamente.\n2. Se enviará tu ubicación en tiempo real y fotos a tus contactos de emergencia."
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/red_panic"
@@ -111,7 +127,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- TARJETA 3: CONTACTOS DE EMERGENCIA -->
+        <!-- TARJETA 3: CONTACTOS SINCRONIZADOS (SOLO LECTURA) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -129,46 +145,31 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mis Contactos de Confianza"
+                    android:text="Contactos de Confianza (Sincronizados)"
                     android:textColor="@color/purple_primary"
                     android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estos contactos son gestionados por el perfil principal y están configurados para recibir alertas del SOS Nativo."
+                    android:textSize="12sp"
+                    android:textColor="@color/text_gray"
                     android:layout_marginBottom="16dp"/>
 
-                <EditText
-                    android:id="@+id/etContacto1"
+                <!-- Aquí inyectaremos los datos dinámicos -->
+                <TextView
+                    android:id="@+id/tvContactosDinamicos"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittext_border"
-                    android:hint="Contacto 1 (Ej: Mamá - +569...)"
-                    android:paddingStart="12dp"
-                    android:layout_marginBottom="12dp"/>
-
-                <EditText
-                    android:id="@+id/etContacto2"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittext_border"
-                    android:hint="Contacto 2 (Ej: Tutor - +569...)"
-                    android:paddingStart="12dp"
-                    android:layout_marginBottom="12dp"/>
-
-                <EditText
-                    android:id="@+id/etContacto3"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittext_border"
-                    android:hint="Contacto 3 (Opcional)"
-                    android:paddingStart="12dp"
-                    android:layout_marginBottom="16dp"/>
-
-                <Button
-                    android:id="@+id/btnGuardarContactos"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Guardar Cambios"
-                    android:textColor="@color/purple_primary"
-                    android:backgroundTint="@color/purple_light"
+                    android:layout_height="wrap_content"
+                    android:background="#F5F5F5"
+                    android:padding="16dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="8dp"
                     app:cornerRadius="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

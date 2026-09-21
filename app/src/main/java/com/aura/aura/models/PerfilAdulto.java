@@ -35,4 +35,10 @@ public class PerfilAdulto implements PerfilUsuario {
     public String getCuandoConsultar() {
         return "Controles preventivos ginecológicos anuales (Papanicolaou - PAP, examen físico de mamas), planificación familiar, dolores ginecológicos severos o persistentes, o para orientación sobre derechos reproductivos.";
     }
+
+    @Override
+    public String getContactosEmergencia() {
+        return "1. Mamá: +56 9 5555 5555\n" +
+                "2. Amiga: +56 9 6666 6666";
+    }
 }

@@ -35,4 +35,10 @@ public class PerfilInfantil implements PerfilUsuario {
     public String getCuandoConsultar() {
         return "Dudas sobre tu primera menstruación (menarquia), dolores intensos en tu periodo, cambios corporales que te asusten, o si alguien te hace sentir incómoda, presionada o asustada en internet o en persona.";
     }
+
+    @Override
+    public String getContactosEmergencia() {
+        return "1. Mamá / +56 9 1111 1111\n" +
+                "2. Papá / +56 9 2222 2222";
+    }
 }

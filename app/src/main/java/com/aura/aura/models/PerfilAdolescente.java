@@ -35,4 +35,10 @@ public class PerfilAdolescente implements PerfilUsuario {
     public String getCuandoConsultar() {
         return "Inicio de vida sexual activa, consejería o entrega confidencial de métodos anticonceptivos (incluida la píldora de emergencia), sospechas de Infecciones de Transmisión Sexual (ITS) o control de violencia en el pololeo.";
     }
+
+    @Override
+    public String getContactosEmergencia() {
+        return "1. Mamá: +56 9 3333 3333\n" +
+                "2. Hermanoa: +56 9 4444 4444";
+    }
 }

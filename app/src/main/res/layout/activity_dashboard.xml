@@ -69,7 +69,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Si te sientes insegura, presiona este botón para notificar tu ubicación."
+                    android:text="Accede a tus redes de apoyo y herramientas de seguridad."
                     android:textSize="13sp"
                     android:textColor="@color/text_gray"
                     android:layout_marginBottom="16dp"/>
@@ -78,7 +78,7 @@
                     android:id="@+id/btnIrEmergencia"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:text="🚨 BOTÓN DE PÁNICO"
+                    android:text="Círculo de Cuidado"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/red_panic"
                     android:textStyle="bold"

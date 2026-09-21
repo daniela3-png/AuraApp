@@ -8,4 +8,5 @@ public interface PerfilUsuario {
     String getAcompanamiento();
     String getSoporte();
     String getCuandoConsultar();
+    String getContactosEmergencia();
 }
