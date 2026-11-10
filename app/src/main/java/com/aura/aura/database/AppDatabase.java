@@ -4,37 +4,31 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.aura.aura.models.Ciclo;
 import com.aura.aura.models.Usuario;
-import net.sqlcipher.database.SupportFactory;
+import com.aura.aura.models.Ciclo;
+import com.aura.aura.models.CitaMedica; // Importamos la nueva tabla
 
-// Subimos la versión a 2 por los cambios en la entidad Usuario
-@Database(entities = {Usuario.class, Ciclo.class}, version = 2, exportSchema = false)
+// Agregamos CitaMedica.class y subimos la versión a 3
+@Database(entities = {Usuario.class, Ciclo.class, CitaMedica.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();
     public abstract CicloDao cicloDao();
+    public abstract CitaMedicaDao citaMedicaDao(); // Exponemos el DAO de citas
 
-    private static volatile AppDatabase INSTANCIA;
+    private static volatile AppDatabase INSTANCE;
 
-    public static AppDatabase getDatabase(final Context context) {
-        if (INSTANCIA == null) {
+    public static AppDatabase getInstance(Context context) {
+        if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
-                if (INSTANCIA == null) {
-
-                    // Clave de encriptación para SQLCipher
-                    // (En un entorno de producción avanzado, esta clave se genera y guarda en el Android Keystore)
-                    final byte[] passphrase = "AuraSecure_Key_2026!".getBytes();
-                    SupportFactory factory = new SupportFactory(passphrase);
-
-                    INSTANCIA = Room.databaseBuilder(context.getApplicationContext(),
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "aura_database")
-                            .openHelperFactory(factory) // Inyectamos el motor de encriptación
-                            .fallbackToDestructiveMigration() // Recrea la BD si hay cambios de versión
+                            .fallbackToDestructiveMigration() // Al subir a versión 3, limpiará la BD de nuevo
                             .build();
                 }
             }
         }
-        return INSTANCIA;
+        return INSTANCE;
     }
 }

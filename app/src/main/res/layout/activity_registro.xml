@@ -1,60 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="#FDF8FF">
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp"
-        android:gravity="center_horizontal">
+        android:padding="24dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crea tu Perfil en Aura"
-            android:textSize="26sp"
+            android:text="Crear Perfil en Aura"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#800080"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingresa tus datos para comenzar"
+            android:textSize="14sp"
+            android:textColor="#666666"
             android:layout_marginBottom="24dp"/>
 
-        <EditText
-            android:id="@+id/etNombre"
+        <!-- Nombre -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tu Nombre"
-            android:inputType="textPersonName"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:hint="Nombre completo o Apodo">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etEdadRegistro"
+        <!-- Correo Electrónico (NUEVO) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tu Edad"
-            android:inputType="number"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:hint="Correo Electrónico">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etContactoEmergencia"
+        <!-- Fecha de Nacimiento (Corregido) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="N° Contacto de Emergencia (SOS)"
-            android:inputType="phone"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:hint="Fecha de Nacimiento">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEdadRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:drawableEnd="@android:drawable/ic_menu_today" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etPin"
+        <!-- PIN de Seguridad -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Crea un PIN de 4 dígitos"
-            android:inputType="numberPassword"
-            android:maxLength="4"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:hint="PIN de Acceso (4 dígitos)"
+            app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword"
+                android:maxLength="4"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- SECCIÓN DEL TUTOR (Oculta por defecto) -->
+        <!-- Contacto de Emergencia -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:hint="Teléfono de Emergencia">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etContactoEmergencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Sección del Tutor (Oculta por defecto) -->
         <LinearLayout
             android:id="@+id/layoutTutor"
             android:layout_width="match_parent"
@@ -63,38 +111,39 @@
             android:visibility="gone"
             android:background="#FFF3E0"
             android:padding="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="24dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Autorización de Tutor/Cuidador"
-                android:textStyle="bold"
+                android:text="Requisito para menores de 14 años"
                 android:textColor="#E65100"
+                android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Por tu edad, necesitamos vincular la cuenta de un adulto responsable."
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp"/>
-
-            <EditText
-                android:id="@+id/etNombreTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre del Tutor"
-                android:inputType="textPersonName"/>
+                android:hint="Correo o Nombre del Tutor">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNombreTutor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <!-- Botón Registrar -->
         <Button
             android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar y Continuar"
-            android:backgroundTint="#800080"
-            android:layout_marginTop="16dp"/>
+            android:layout_height="56dp"
+            android:text="Registrarme"
+            android:textSize="16sp"
+            android:backgroundTint="#6200EE"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="8dp"/>
 
     </LinearLayout>
 </ScrollView>

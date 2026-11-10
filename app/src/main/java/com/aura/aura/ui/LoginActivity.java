@@ -2,101 +2,79 @@ package com.aura.aura.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
-import java.util.concurrent.Executor;
+
 import com.aura.aura.R;
+import com.aura.aura.database.AppDatabase;
+import com.aura.aura.models.Usuario;
+
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etNombreLogin;
+    private EditText etEmailLogin, etPinLogin;
     private Button btnIngresar;
-    private TextView tvIrRegistro;
-
-    // Variables para la biometría
-    private Executor executor;
-    private BiometricPrompt biometricPrompt;
-    private BiometricPrompt.PromptInfo promptInfo;
+    private android.widget.TextView btnIrRegistro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etNombreLogin = findViewById(R.id.etNombreLogin);
+        // Asegúrate de que estos IDs coincidan con tu activity_login.xml
+        etEmailLogin = findViewById(R.id.etEmailLogin);
+        etPinLogin = findViewById(R.id.etPinLogin);
         btnIngresar = findViewById(R.id.btnIngresar);
-        tvIrRegistro = findViewById(R.id.tvIrRegistro);
+        btnIrRegistro = findViewById(R.id.btnIrRegistro);
 
-        // 1. Configurar el "Ejecutor" (el hilo donde correrá la verificación)
-        executor = ContextCompat.getMainExecutor(this);
+        btnIngresar.setOnClickListener(v -> validarLogin());
 
-        // 2. Configurar el comportamiento del panel biométrico
-        biometricPrompt = new BiometricPrompt(LoginActivity.this,
-                executor, new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(),
-                        "Error de autenticación: " + errString, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-                // Si la huella es correcta, ingresamos al Dashboard
-                String nombre = etNombreLogin.getText().toString().trim();
-                Toast.makeText(getApplicationContext(),
-                        "¡Bienvenida de nuevo, " + nombre + "!", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                intent.putExtra("NOMBRE_USUARIA", nombre);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Huella no reconocida. Intenta de nuevo.", Toast.LENGTH_SHORT).show();
-            }
+        btnIrRegistro.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegistroActivity.class));
         });
+    }
 
-        // 3. Configurar los textos que verá la usuaria en el panel
-        promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Autenticación Segura de Aura")
-                .setSubtitle("Usa tu huella dactilar o rostro para ingresar")
-                .setNegativeButtonText("Cancelar")
-                .build();
+    private void validarLogin() {
+        String email = etEmailLogin.getText().toString().trim();
+        String pin = etPinLogin.getText().toString().trim();
 
-        // Lógica del botón Ingresar
-        btnIngresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nombre = etNombreLogin.getText().toString().trim();
+        if (email.isEmpty() || pin.isEmpty()) {
+            Toast.makeText(this, "Ingresa tu correo y PIN", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                if (!nombre.isEmpty()) {
-                    // Si ingresó su nombre, ¡Lanzamos el lector de huellas!
-                    biometricPrompt.authenticate(promptInfo);
+        // 1. Buscamos en SQLite usando un Hilo Secundario
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+
+            // Usamos la consulta que creamos en el UsuarioDao
+            Usuario usuarioDb = db.usuarioDao().obtenerUsuarioPorEmail(email);
+
+            // 2. Volvemos al hilo principal para mostrar mensajes y cambiar de pantalla
+            runOnUiThread(() -> {
+                if (usuarioDb == null) {
+                    Toast.makeText(this, "Usuario no encontrado. Verifica tu correo.", Toast.LENGTH_SHORT).show();
+                } else if (!usuarioDb.pin_acceso.equals(pin)) {
+                    Toast.makeText(this, "PIN incorrecto", Toast.LENGTH_SHORT).show();
+                } else if (usuarioDb.estado_cuenta.equals("Pendiente_Aprobacion")) {
+                    // Bloqueo por regla de negocio: La niña no entra hasta que el tutor la apruebe
+                    Toast.makeText(this, "Tu cuenta está esperando la autorización de tu tutor.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Por favor, ingresa tu nombre de usuario", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                    // Login exitoso
+                    Toast.makeText(this, "¡Bienvenida " + usuarioDb.nombre + "!", Toast.LENGTH_SHORT).show();
 
-        // Lógica para ir a Registro
-        tvIrRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
-                startActivity(intent);
-            }
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    // Pasamos el ID del usuario al Dashboard para saber de quién cargar los datos después
+                    intent.putExtra("ID_USUARIO", usuarioDb.id_usuario);
+                    intent.putExtra("TIPO_PERFIL", usuarioDb.tipo_perfil);
+
+                    startActivity(intent);
+                    finish();
+                }
+            });
         });
     }
 }
