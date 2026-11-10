@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="#FAFAFA">
 
     <!-- Tarjeta blanca centrada simulando el contenedor web -->
     <androidx.cardview.widget.CardView
@@ -13,7 +13,7 @@
         android:layout_margin="32dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
-        app:cardBackgroundColor="@color/white">
+        app:cardBackgroundColor="#FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@android:drawable/ic_secure"
-                app:tint="@color/purple_primary"
+                app:tint="#6200EE"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -36,57 +36,72 @@
                 android:text="Ingresar a Aura"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                android:textColor="@color/purple_primary"
+                android:textColor="#333333"
                 android:layout_marginBottom="8dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Escribe tu nombre para iniciar tu sesión segura local."
+                android:text="Ingresa tus credenciales para acceder a tu sesión segura local."
                 android:textAlignment="center"
                 android:textSize="14sp"
-                android:textColor="@color/text_gray"
+                android:textColor="#666666"
                 android:layout_marginBottom="32dp"/>
 
-            <TextView
+            <!-- Correo Electrónico -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NOMBRE DE USUARIO:"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/purple_primary"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="16dp"
+                android:hint="Correo Electrónico">
 
-            <EditText
-                android:id="@+id/etNombreLogin"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmailLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- PIN de Seguridad con botón de mostrar/ocultar -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edittext_border"
-                android:hint="Ej: Selena, Aurora, Ema..."
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:inputType="textPersonName"
-                android:layout_marginBottom="24dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:hint="PIN de Acceso (4 dígitos)"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPinLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnIngresar"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="56dp"
                 android:text="Ingresar de Forma Segura"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/purple_primary"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#6200EE"
                 android:layout_marginBottom="24dp"
                 app:cornerRadius="8dp"/>
 
             <!-- Link interactivo al registro -->
             <TextView
-                android:id="@+id/tvIrRegistro"
+                android:id="@+id/btnIrRegistro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿No estás registrada en este equipo? Registrarse aquí"
-                android:textColor="@color/purple_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
+                android:text="¿No tienes cuenta? Regístrate aquí"
+                android:textColor="#6200EE"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

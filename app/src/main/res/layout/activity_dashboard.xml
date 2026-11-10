@@ -332,5 +332,18 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/btnVincularMenor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Autorizar a una Niña (Código AURA)"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cerrar Sesión" />
+
     </LinearLayout>
 </ScrollView>
