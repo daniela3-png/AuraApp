@@ -23,7 +23,7 @@
                 android:id="@+id/tvBienvenida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hola, Usuaria"
+                android:text=""
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/purple_primary"
@@ -335,15 +335,18 @@
         <Button
             android:id="@+id/btnVincularMenor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Autorizar a una Niña (Código AURA)"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cerrar Sesión" />
+            android:layout_height="60dp"
+            android:text="Cerrar Sesión"
+            android:layout_marginBottom="24dp" />
 
     </LinearLayout>
 </ScrollView>

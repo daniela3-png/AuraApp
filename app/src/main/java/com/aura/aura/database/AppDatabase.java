@@ -9,7 +9,7 @@ import com.aura.aura.models.Ciclo;
 import com.aura.aura.models.CitaMedica; // Importamos la nueva tabla
 
 // Agregamos CitaMedica.class y subimos la versión a 3
-@Database(entities = {Usuario.class, Ciclo.class, CitaMedica.class}, version = 3, exportSchema = false)
+@Database(entities = {Usuario.class, Ciclo.class, CitaMedica.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();

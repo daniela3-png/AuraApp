@@ -36,7 +36,6 @@ public class RegistroActivity extends AppCompatActivity {
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);
         etFechaNacimiento = findViewById(R.id.etEdadRegistro); // Reutilizamos tu ID actual para la fecha
-        etContactoEmergencia = findViewById(R.id.etContactoEmergencia);
         etPin = findViewById(R.id.etPin);
         etNombreTutor = findViewById(R.id.etNombreTutor);
         layoutTutor = findViewById(R.id.layoutTutor);
@@ -80,13 +79,12 @@ public class RegistroActivity extends AppCompatActivity {
 
     private void guardarPerfil() {
         String nombre = etNombre.getText().toString();
-        String contacto = etContactoEmergencia.getText().toString();
         String pin = etPin.getText().toString();
         String nombreTutor = etNombreTutor.getText().toString();
 
         String email = etEmail.getText().toString();
 
-        if (nombre.isEmpty() || email.isEmpty() || fechaNacimientoStr.isEmpty() || contacto.isEmpty() || pin.isEmpty()) {
+        if (nombre.isEmpty() || email.isEmpty() || fechaNacimientoStr.isEmpty() || pin.isEmpty()) {
             Toast.makeText(this, "Completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -102,7 +100,6 @@ public class RegistroActivity extends AppCompatActivity {
         nuevoUsuario.email = email;
         nuevoUsuario.pin_acceso = pin;
         nuevoUsuario.fecha_nacimiento = fechaNacimientoStr;
-        nuevoUsuario.contacto_emergencia = contacto;
 
         // 2. Aplicamos la lógica de perfiles y vinculación del diagrama
         if (edadCalculada < 14) {

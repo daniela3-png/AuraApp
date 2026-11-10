@@ -17,8 +17,6 @@ public class Usuario {
     // SQLite no tiene un tipo "DATE" nativo.
     // Guardaremos la fecha como String en formato "YYYY-MM-DD" para facilitar el cálculo de edad.
     public String fecha_nacimiento;
-
-    public String contacto_emergencia;
     public String tipo_perfil;
     public String estado_cuenta;
     public String codigo_vinculacion;

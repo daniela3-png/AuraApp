@@ -195,23 +195,32 @@ public class DashboardActivity extends AppCompatActivity {
     private void guardarCicloMenstrual() {
         String fechaInicio = etFechaInicioDashboard.getText().toString();
         String fechaFin = etFechaFinDashboard.getText().toString();
+
         if (fechaInicio.isEmpty() || fechaFin.isEmpty()) {
             Toast.makeText(this, "Selecciona la fecha de inicio y término", Toast.LENGTH_SHORT).show();
             return;
         }
+
         Executors.newSingleThreadExecutor().execute(() -> {
-            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
-            Ciclo nuevoCiclo = new Ciclo();
-            nuevoCiclo.id_usuario = miIdUsuario;
-            nuevoCiclo.fecha_inicio = fechaInicio;
-            nuevoCiclo.fecha_fin = fechaFin;
-            db.cicloDao().insertarCiclo(nuevoCiclo);
-            runOnUiThread(() -> {
-                Toast.makeText(DashboardActivity.this, "¡Ciclo guardado exitosamente!", Toast.LENGTH_SHORT).show();
-                etFechaInicioDashboard.setText("");
-                etFechaFinDashboard.setText("");
-                cargarHistorialCiclos();
-            });
+            try {
+                AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+                Ciclo nuevoCiclo = new Ciclo();
+                nuevoCiclo.id_usuario = miIdUsuario;
+                nuevoCiclo.fecha_inicio = fechaInicio;
+                nuevoCiclo.fecha_fin = fechaFin;
+
+                db.cicloDao().insertarCiclo(nuevoCiclo);
+
+                // Forzamos la actualización visual en el hilo principal
+                runOnUiThread(() -> {
+                    etFechaInicioDashboard.setText("");
+                    etFechaFinDashboard.setText("");
+                    Toast.makeText(DashboardActivity.this, "¡Ciclo guardado exitosamente!", Toast.LENGTH_SHORT).show();
+                    cargarHistorialCiclos(); // Refresca la lista al instante
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(DashboardActivity.this, "Error al guardar: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
         });
     }
 
