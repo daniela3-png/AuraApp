@@ -23,7 +23,6 @@ public class EmergenciaActivity extends AppCompatActivity {
         btnFonoMujer = findViewById(R.id.btnFonoMujer);
         btnFonoNinos = findViewById(R.id.btnFonoNinos);
         btnFonoSuicidio = findViewById(R.id.btnFonoSuicidio);
-        tvContactosDinamicos = findViewById(R.id.tvContactosDinamicos);
 
         // Llamadas oficiales
         btnFonoMujer.setOnClickListener(v -> llamarLineaOficial("1455"));
@@ -36,8 +35,6 @@ public class EmergenciaActivity extends AppCompatActivity {
         // Instanciar el perfil usando el Factory Pattern
         PerfilUsuario perfil = PerfilFactory.crearPerfil(edad);
 
-        // Inyectar los contactos hardcodeados según el perfil
-        tvContactosDinamicos.setText(perfil.getContactosEmergencia());
     }
 
     private void llamarLineaOficial(String numero) {

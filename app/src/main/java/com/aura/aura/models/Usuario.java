@@ -7,16 +7,18 @@ import androidx.room.PrimaryKey;
 public class Usuario {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public int id_usuario;
 
     public String nombre;
+    public String email;        // Requisito indispensable para el Login
     public int edad;
-    public String tipoPerfil;
+    public String tipo_perfil;
+    public String pin;          // PIN de 4 dígitos
 
-    // Nuevos campos
-    public String contactoEmergencia;
-    public String nombreTutor; // Solo si aplica
-    public String pinSeguridad; // Para un inicio de sesión básico local
+    // Campos para la Red de Apoyo / Vincular Niña
+    public String nombreTutor;
+    public int id_tutor;
+    public String estado_cuenta; // "Activa" o "Pendiente_Aprobacion"
 
     public Usuario() {
     }
