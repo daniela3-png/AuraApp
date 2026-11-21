@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.aura.aura.R;
 import com.aura.aura.database.AppDatabase;
+import com.aura.aura.database.FirebaseRepository;
 import com.aura.aura.models.Ciclo;
 import com.aura.aura.models.CitaMedica;
 import com.aura.aura.models.Usuario;
@@ -33,6 +34,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private int miIdUsuario;
     private String miTipoPerfil;
+    private FirebaseRepository firebaseRepo;
 
     // Elementos de UI
     private TextView tvBienvenida;
@@ -47,6 +49,9 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        // Inicializar repositorio remoto de Firebase
+        firebaseRepo = new FirebaseRepository();
+
         // Recuperar datos de sesión desde el Login
         miIdUsuario = getIntent().getIntExtra("ID_USUARIO", -1);
         miTipoPerfil = getIntent().getStringExtra("TIPO_PERFIL");
@@ -56,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity {
         cargarDatosUsuario();
         configurarPermisosPorRol();
 
-        // Cargar registros iniciales desde SQLite (READ)
+        // Cargar registros desde Firebase (READ remoto en tiempo real) y respaldar con SQLite
         cargarHistorialCiclos();
         cargarHistorialCitas();
 
@@ -89,7 +94,7 @@ public class DashboardActivity extends AppCompatActivity {
         btnIrRedApoyo = findViewById(R.id.btnIrRedApoyo);
         btnIrEmergencia = findViewById(R.id.btnIrEmergencia);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
-        btnVincularMenor = findViewById(R.id.btnVincularMenor); // Solo visible para adultos
+        btnVincularMenor = findViewById(R.id.btnVincularMenor);
 
         etFechaInicioDashboard = findViewById(R.id.etFechaInicioDashboard);
         etFechaFinDashboard = findViewById(R.id.etFechaFinDashboard);
@@ -106,14 +111,12 @@ public class DashboardActivity extends AppCompatActivity {
     private void configurarPermisosPorRol() {
         if (miTipoPerfil == null) return;
 
-        // RBAC: Mostrar vinculación solo a adultos
         if (miTipoPerfil.equals("PerfilAdulto")) {
             btnVincularMenor.setVisibility(View.VISIBLE);
         } else {
             btnVincularMenor.setVisibility(View.GONE);
         }
 
-        // RBAC: Ocultar agenda clínica a perfiles infantiles
         if (miTipoPerfil.equals("PerfilInfantil")) {
             cardAgendaMedica.setVisibility(View.GONE);
         } else {
@@ -128,12 +131,14 @@ public class DashboardActivity extends AppCompatActivity {
             Usuario usuaria = db.usuarioDao().obtenerUsuarioPorId(miIdUsuario);
             if (usuaria != null) {
                 runOnUiThread(() -> tvBienvenida.setText("Hola, " + usuaria.nombre));
+                // Sincronizar datos básicos del usuario en Firebase
+                firebaseRepo.guardarUsuario(usuaria, null);
             }
         });
     }
 
     // =========================================================================
-    // MÓDULO CRUD: CICLO MENSTRUAL
+    // MÓDULO CRUD: CICLO MENSTRUAL (SQLITE + FIREBASE)
     // =========================================================================
 
     private void guardarCicloMenstrual() {
@@ -155,76 +160,102 @@ public class DashboardActivity extends AppCompatActivity {
                 Ciclo nuevoCiclo = new Ciclo();
                 nuevoCiclo.id_usuario = miIdUsuario;
                 nuevoCiclo.fecha_inicio = inicio;
-                nuevoCiclo.fecha_fin = fin; // Puede ir vacío ("") si está en curso
+                nuevoCiclo.fecha_fin = fin;
 
+                // 1. Guardar localmente en SQLite
                 AppDatabase.getDatabase(getApplicationContext()).cicloDao().insertarCiclo(nuevoCiclo);
 
+                // 2. Enviar a Firebase Realtime Database
+                firebaseRepo.registrarCiclo(nuevoCiclo, new FirebaseRepository.OperacionCallback() {
+                    @Override
+                    public void onExito(String mensaje) {
+                        runOnUiThread(() -> Toast.makeText(DashboardActivity.this, mensaje, Toast.LENGTH_SHORT).show());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> Toast.makeText(DashboardActivity.this, "Guardado local (sin red): " + error, Toast.LENGTH_LONG).show());
+                    }
+                });
+
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Ciclo registrado", Toast.LENGTH_SHORT).show();
                     etFechaInicioDashboard.setText("");
                     etFechaFinDashboard.setText("");
-                    cargarHistorialCiclos();
                 });
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(this, "Error al guardar ciclo", Toast.LENGTH_SHORT).show());
             }
         });
     }
 
     private void cargarHistorialCiclos() {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<Ciclo> listaCiclos = AppDatabase.getDatabase(getApplicationContext())
-                    .cicloDao().obtenerCiclosPorUsuario(miIdUsuario);
+        // Escucha activa en tiempo real desde Firebase Realtime Database
+        firebaseRepo.escucharCiclosUsuario(miIdUsuario, new FirebaseRepository.ListaCiclosCallback() {
+            @Override
+            public void onDatosCargados(List<Ciclo> listaCiclosRemotos) {
+                runOnUiThread(() -> renderizarListaCiclos(listaCiclosRemotos));
+            }
 
-            runOnUiThread(() -> {
-                layoutHistorialCiclos.removeAllViews();
-                if (listaCiclos.isEmpty()) {
-                    TextView tvVacio = new TextView(this);
-                    tvVacio.setText("Aún no tienes ciclos registrados.");
-                    tvVacio.setTextColor(Color.parseColor("#6B657D"));
-                    layoutHistorialCiclos.addView(tvVacio);
-                } else {
-                    for (Ciclo c : listaCiclos) {
-                        LinearLayout fila = new LinearLayout(this);
-                        fila.setOrientation(LinearLayout.VERTICAL);
-                        fila.setPadding(0, 16, 0, 24);
-
-                        TextView tvCiclo = new TextView(this);
-                        tvCiclo.setTextColor(Color.parseColor("#6C5CE7"));
-                        tvCiclo.setTextSize(15f);
-
-                        // Lógica: Ciclo en curso vs Ciclo terminado
-                        if (c.fecha_fin == null || c.fecha_fin.isEmpty()) {
-                            tvCiclo.setText("🩸 Inicio: " + c.fecha_inicio + "\nEstado: En curso");
-
-                            // Creamos un botón dinámico para terminar el ciclo
-                            Button btnTerminar = new Button(this);
-                            btnTerminar.setText("Confirmar Término");
-                            btnTerminar.setBackgroundColor(Color.parseColor("#EFE6FD"));
-                            btnTerminar.setTextColor(Color.parseColor("#6C5CE7"));
-
-                            btnTerminar.setOnClickListener(v -> mostrarDialogoActualizarCiclo(c));
-
-                            fila.addView(tvCiclo);
-                            fila.addView(btnTerminar);
-                        } else {
-                            long dias = calcularDias(c.fecha_inicio, c.fecha_fin);
-                            tvCiclo.setText("🩸 " + c.fecha_inicio + " al " + c.fecha_fin + "\nDuración: " + dias + " días");
-                            fila.addView(tvCiclo);
-                        }
-
-                        // Eventos genéricos para UPDATE y DELETE (Mantener presionado)
-                        tvCiclo.setOnClickListener(v -> mostrarDialogoActualizarCiclo(c));
-                        tvCiclo.setOnLongClickListener(v -> {
-                            mostrarDialogoEliminarCiclo(c);
-                            return true;
-                        });
-
-                        layoutHistorialCiclos.addView(fila);
-                    }
-                }
-            });
+            @Override
+            public void onError(String error) {
+                // Si falla la conexión remota, comunica el error y carga respaldo local SQLite
+                runOnUiThread(() -> Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT).show());
+                cargarCiclosLocalesRespaldo();
+            }
         });
+    }
+
+    private void cargarCiclosLocalesRespaldo() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Ciclo> listaLocal = AppDatabase.getDatabase(getApplicationContext())
+                    .cicloDao().obtenerCiclosPorUsuario(miIdUsuario);
+            runOnUiThread(() -> renderizarListaCiclos(listaLocal));
+        });
+    }
+
+    private void renderizarListaCiclos(List<Ciclo> listaCiclos) {
+        layoutHistorialCiclos.removeAllViews();
+        if (listaCiclos == null || listaCiclos.isEmpty()) {
+            TextView tvVacio = new TextView(this);
+            tvVacio.setText("Aún no tienes ciclos registrados.");
+            tvVacio.setTextColor(Color.parseColor("#6B657D"));
+            layoutHistorialCiclos.addView(tvVacio);
+        } else {
+            for (Ciclo c : listaCiclos) {
+                LinearLayout fila = new LinearLayout(this);
+                fila.setOrientation(LinearLayout.VERTICAL);
+                fila.setPadding(0, 16, 0, 24);
+
+                TextView tvCiclo = new TextView(this);
+                tvCiclo.setTextColor(Color.parseColor("#6C5CE7"));
+                tvCiclo.setTextSize(15f);
+
+                if (c.fecha_fin == null || c.fecha_fin.isEmpty()) {
+                    tvCiclo.setText("🩸 Inicio: " + c.fecha_inicio + "\nEstado: En curso");
+
+                    Button btnTerminar = new Button(this);
+                    btnTerminar.setText("Confirmar Término");
+                    btnTerminar.setBackgroundColor(Color.parseColor("#EFE6FD"));
+                    btnTerminar.setTextColor(Color.parseColor("#6C5CE7"));
+                    btnTerminar.setOnClickListener(v -> mostrarDialogoActualizarCiclo(c));
+
+                    fila.addView(tvCiclo);
+                    fila.addView(btnTerminar);
+                } else {
+                    long dias = calcularDias(c.fecha_inicio, c.fecha_fin);
+                    tvCiclo.setText("🩸 " + c.fecha_inicio + " al " + c.fecha_fin + "\nDuración: " + dias + " días");
+                    fila.addView(tvCiclo);
+                }
+
+                tvCiclo.setOnClickListener(v -> mostrarDialogoActualizarCiclo(c));
+                tvCiclo.setOnLongClickListener(v -> {
+                    mostrarDialogoEliminarCiclo(c);
+                    return true;
+                });
+
+                layoutHistorialCiclos.addView(fila);
+            }
+        }
     }
 
     private void mostrarDialogoActualizarCiclo(Ciclo ciclo) {
@@ -262,7 +293,7 @@ public class DashboardActivity extends AppCompatActivity {
                     AppDatabase.getDatabase(getApplicationContext()).cicloDao().actualizarCiclo(ciclo);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Ciclo actualizado", Toast.LENGTH_SHORT).show();
-                        cargarHistorialCiclos();
+                        cargarCiclosLocalesRespaldo();
                     });
                 });
             } else {
@@ -282,7 +313,7 @@ public class DashboardActivity extends AppCompatActivity {
                         AppDatabase.getDatabase(getApplicationContext()).cicloDao().eliminarCiclo(ciclo);
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Ciclo eliminado", Toast.LENGTH_SHORT).show();
-                            cargarHistorialCiclos();
+                            cargarCiclosLocalesRespaldo();
                         });
                     });
                 })
@@ -291,7 +322,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     // =========================================================================
-    // MÓDULO CRUD: CITAS MÉDICAS
+    // MÓDULO CRUD: CITAS MÉDICAS (SQLITE + FIREBASE)
     // =========================================================================
 
     private void guardarCitaMedica() {
@@ -310,13 +341,25 @@ public class DashboardActivity extends AppCompatActivity {
                 nuevaCita.fecha_cita = fecha;
                 nuevaCita.especialidad = especialidad;
 
+                // 1. Guardar localmente en SQLite
                 AppDatabase.getDatabase(getApplicationContext()).citaMedicaDao().insertarCita(nuevaCita);
 
+                // 2. Enviar a Firebase Realtime Database
+                firebaseRepo.registrarCita(nuevaCita, new FirebaseRepository.OperacionCallback() {
+                    @Override
+                    public void onExito(String mensaje) {
+                        runOnUiThread(() -> Toast.makeText(DashboardActivity.this, mensaje, Toast.LENGTH_SHORT).show());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> Toast.makeText(DashboardActivity.this, "Guardado local (sin red): " + error, Toast.LENGTH_LONG).show());
+                    }
+                });
+
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "¡Cita agendada!", Toast.LENGTH_SHORT).show();
                     etFechaCita.setText("");
                     etEspecialidad.setText("");
-                    cargarHistorialCitas();
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> Toast.makeText(this, "Error al guardar cita", Toast.LENGTH_SHORT).show());
@@ -325,38 +368,54 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void cargarHistorialCitas() {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<CitaMedica> listaCitas = AppDatabase.getDatabase(getApplicationContext())
-                    .citaMedicaDao().obtenerCitasPorUsuario(miIdUsuario);
+        // Escucha activa en tiempo real desde Firebase Realtime Database
+        firebaseRepo.escucharCitasUsuario(miIdUsuario, new FirebaseRepository.ListaCitasCallback() {
+            @Override
+            public void onDatosCargados(List<CitaMedica> listaCitasRemotas) {
+                runOnUiThread(() -> renderizarListaCitas(listaCitasRemotas));
+            }
 
-            runOnUiThread(() -> {
-                layoutCitasAgendadas.removeAllViews();
-                if (listaCitas.isEmpty()) {
-                    TextView tvVacio = new TextView(this);
-                    tvVacio.setText("No tienes citas próximas agendadas.");
-                    tvVacio.setTextColor(Color.parseColor("#6B657D"));
-                    layoutCitasAgendadas.addView(tvVacio);
-                } else {
-                    for (CitaMedica cita : listaCitas) {
-                        TextView tvCita = new TextView(this);
-                        tvCita.setText("📅 " + cita.fecha_cita + " - " + cita.especialidad);
-                        tvCita.setPadding(0, 16, 0, 16);
-                        tvCita.setTextColor(Color.parseColor("#E84393"));
-                        tvCita.setTextSize(14f);
-                        tvCita.setTypeface(null, android.graphics.Typeface.BOLD);
-
-                        // Eventos para UPDATE y DELETE
-                        tvCita.setOnClickListener(v -> mostrarDialogoActualizarCita(cita));
-                        tvCita.setOnLongClickListener(v -> {
-                            mostrarDialogoEliminarCita(cita);
-                            return true;
-                        });
-
-                        layoutCitasAgendadas.addView(tvCita);
-                    }
-                }
-            });
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> Toast.makeText(DashboardActivity.this, error, Toast.LENGTH_SHORT).show());
+                cargarCitasLocalesRespaldo();
+            }
         });
+    }
+
+    private void cargarCitasLocalesRespaldo() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<CitaMedica> listaLocal = AppDatabase.getDatabase(getApplicationContext())
+                    .citaMedicaDao().obtenerCitasPorUsuario(miIdUsuario);
+            runOnUiThread(() -> renderizarListaCitas(listaLocal));
+        });
+    }
+
+    private void renderizarListaCitas(List<CitaMedica> listaCitas) {
+        layoutCitasAgendadas.removeAllViews();
+        if (listaCitas == null || listaCitas.isEmpty()) {
+            TextView tvVacio = new TextView(this);
+            tvVacio.setText("No tienes citas próximas agendadas.");
+            tvVacio.setTextColor(Color.parseColor("#6B657D"));
+            layoutCitasAgendadas.addView(tvVacio);
+        } else {
+            for (CitaMedica cita : listaCitas) {
+                TextView tvCita = new TextView(this);
+                tvCita.setText("📅 " + cita.fecha_cita + " - " + cita.especialidad);
+                tvCita.setPadding(0, 16, 0, 16);
+                tvCita.setTextColor(Color.parseColor("#E84393"));
+                tvCita.setTextSize(14f);
+                tvCita.setTypeface(null, android.graphics.Typeface.BOLD);
+
+                tvCita.setOnClickListener(v -> mostrarDialogoActualizarCita(cita));
+                tvCita.setOnLongClickListener(v -> {
+                    mostrarDialogoEliminarCita(cita);
+                    return true;
+                });
+
+                layoutCitasAgendadas.addView(tvCita);
+            }
+        }
     }
 
     private void mostrarDialogoActualizarCita(CitaMedica cita) {
@@ -391,7 +450,7 @@ public class DashboardActivity extends AppCompatActivity {
                     AppDatabase.getDatabase(getApplicationContext()).citaMedicaDao().actualizarCita(cita);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Cita reprogramada", Toast.LENGTH_SHORT).show();
-                        cargarHistorialCitas();
+                        cargarCitasLocalesRespaldo();
                     });
                 });
             }
@@ -409,7 +468,7 @@ public class DashboardActivity extends AppCompatActivity {
                         AppDatabase.getDatabase(getApplicationContext()).citaMedicaDao().eliminarCita(cita);
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Cita eliminada", Toast.LENGTH_SHORT).show();
-                            cargarHistorialCitas();
+                            cargarCitasLocalesRespaldo();
                         });
                     });
                 })
@@ -422,7 +481,6 @@ public class DashboardActivity extends AppCompatActivity {
     // =========================================================================
 
     private void configurarDatePickers() {
-        // false = no es cita (bloquea el futuro). true = es cita (bloquea el pasado)
         etFechaInicioDashboard.setOnClickListener(v -> mostrarDatePicker((EditText) v, false));
         etFechaFinDashboard.setOnClickListener(v -> mostrarDatePicker((EditText) v, false));
         etFechaCita.setOnClickListener(v -> mostrarDatePicker((EditText) v, true));
@@ -440,10 +498,8 @@ public class DashboardActivity extends AppCompatActivity {
         }, anio, mes, dia);
 
         if (esParaCita) {
-            // Citas: No se puede agendar en el pasado (mínimo hoy)
             dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         } else {
-            // Ciclos: No se puede registrar un inicio/fin en el futuro (máximo hoy)
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         }
 
@@ -481,10 +537,10 @@ public class DashboardActivity extends AppCompatActivity {
                     nina.id_tutor = miIdUsuario;
                     nina.estado_cuenta = "Activa";
                     db.usuarioDao().actualizarUsuario(nina);
-                    // SOLUCIÓN: Usar DashboardActivity.this en lugar de solo this
+                    // Sincronizar también en Firebase el cambio de estado de la menor
+                    firebaseRepo.guardarUsuario(nina, null);
                     runOnUiThread(() -> Toast.makeText(DashboardActivity.this, "¡" + nina.nombre + " vinculada!", Toast.LENGTH_LONG).show());
                 } else {
-                    // SOLUCIÓN: Usar DashboardActivity.this
                     runOnUiThread(() -> Toast.makeText(DashboardActivity.this, "PIN inválido o cuenta ya activa.", Toast.LENGTH_SHORT).show());
                 }
             });
