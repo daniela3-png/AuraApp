@@ -321,10 +321,7 @@ public class DashboardActivity extends AppCompatActivity {
                 .show();
     }
 
-    // =========================================================================
     // MÓDULO CRUD: CITAS MÉDICAS (SQLITE + FIREBASE)
-    // =========================================================================
-
     private void guardarCitaMedica() {
         String fecha = etFechaCita.getText().toString();
         String especialidad = etEspecialidad.getText().toString().trim();
@@ -476,9 +473,7 @@ public class DashboardActivity extends AppCompatActivity {
                 .show();
     }
 
-    // =========================================================================
     // UTILIDADES Y CUADROS DE DIÁLOGO
-    // =========================================================================
 
     private void configurarDatePickers() {
         etFechaInicioDashboard.setOnClickListener(v -> mostrarDatePicker((EditText) v, false));

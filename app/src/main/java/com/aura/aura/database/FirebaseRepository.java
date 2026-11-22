@@ -40,10 +40,24 @@ public class FirebaseRepository {
 
     // 1. REGISTRAR / SINCRONIZAR USUARIO EN FIREBASE
     public void guardarUsuario(Usuario usuario, OperacionCallback callback) {
-        String key = String.valueOf(usuario.id_usuario);
-        rootRef.child("usuarios").child(key).setValue(usuario)
+        // Creamos un objeto copia para no sobrescribir el PIN en memoria local
+        Usuario usuarioSeguro = new Usuario();
+        usuarioSeguro.id_usuario = usuario.id_usuario;
+        usuarioSeguro.nombre = usuario.nombre;
+        usuarioSeguro.email = usuario.email;
+        usuarioSeguro.edad = usuario.edad;
+        usuarioSeguro.tipo_perfil = usuario.tipo_perfil;
+        usuarioSeguro.id_tutor = usuario.id_tutor;
+        usuarioSeguro.nombreTutor = usuario.nombreTutor;
+        usuarioSeguro.estado_cuenta = usuario.estado_cuenta;
+
+        // Encriptamos (hasheamos) el PIN con SHA-256 antes de enviarlo a Firebase
+        usuarioSeguro.pin = (usuario.pin != null) ? generarHashSHA256(usuario.pin) : "";
+
+        String key = String.valueOf(usuarioSeguro.id_usuario);
+        rootRef.child("usuarios").child(key).setValue(usuarioSeguro)
                 .addOnSuccessListener(unused -> {
-                    if (callback != null) callback.onExito("Usuario sincronizado en la nube");
+                    if (callback != null) callback.onExito("Usuario sincronizado de forma segura");
                 })
                 .addOnFailureListener(e -> {
                     if (callback != null) callback.onError("Error al guardar usuario: " + e.getMessage());
@@ -128,5 +142,20 @@ public class FirebaseRepository {
                 if (callback != null) callback.onError("Error al leer citas: " + error.getMessage());
             }
         });
+    }
+    private String generarHashSHA256(String texto) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(texto.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            return "PROTEGIDO";
+        }
     }
 }
