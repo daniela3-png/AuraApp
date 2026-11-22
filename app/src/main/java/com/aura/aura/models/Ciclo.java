@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey;
 public class Ciclo {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public int id_ciclo;
 
-    public String fechaInicio;
-    public String fechaFin;
+    public int id_usuario;
+    public String fecha_inicio;
+    public String fecha_fin;
 
-    // Constructor vacío requerido por Room
     public Ciclo() {
     }
 }

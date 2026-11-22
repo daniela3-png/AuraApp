@@ -18,31 +18,34 @@
             android:text="Crea tu Perfil en Aura"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="#800080"
+            android:textColor="#6C5CE7"
             android:layout_marginBottom="24dp"/>
 
         <EditText
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tu Nombre"
+            android:hint="¿Cómo te llamas?"
             android:inputType="textPersonName"
             android:layout_marginBottom="16dp"/>
 
+        <!-- NUEVO: Campo de Correo Electrónico -->
         <EditText
-            android:id="@+id/etEdadRegistro"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tu Edad"
-            android:inputType="number"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress"
             android:layout_marginBottom="16dp"/>
 
+        <!-- NUEVO: Campo de Fecha de Nacimiento -->
         <EditText
-            android:id="@+id/etContactoEmergencia"
+            android:id="@+id/etFechaNacimiento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="N° Contacto de Emergencia (SOS)"
-            android:inputType="phone"
+            android:hint="Fecha de Nacimiento"
+            android:focusable="false"
+            android:clickable="true"
             android:layout_marginBottom="16dp"/>
 
         <EditText
@@ -61,7 +64,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            android:background="#FFF3E0"
+            android:background="#FFE6F0"
             android:padding="16dp"
             android:layout_marginBottom="16dp">
 
@@ -70,13 +73,14 @@
                 android:layout_height="wrap_content"
                 android:text="Autorización de Tutor/Cuidador"
                 android:textStyle="bold"
-                android:textColor="#E65100"
+                android:textColor="#E84393"
                 android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Por tu edad, necesitamos vincular la cuenta de un adulto responsable."
+                android:textColor="#1E1638"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp"/>
 
@@ -91,9 +95,11 @@
         <Button
             android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:text="Guardar y Continuar"
-            android:backgroundTint="#800080"
+            android:backgroundTint="#6C5CE7"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
     </LinearLayout>

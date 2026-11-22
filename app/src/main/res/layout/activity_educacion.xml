@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="#FDF8FF"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,16 +18,16 @@
             android:text="Módulos de Educación Sexual Integral"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/purple_primary"
+            android:textColor="#6C5CE7"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/tvEnfoque"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Enfoque..."
             android:textSize="14sp"
-            android:textColor="@color/text_gray"
+            android:textColor="#6B657D"
             android:layout_marginBottom="24dp"/>
 
         <!-- Contenedor donde inyectaremos las tarjetas de los temas dinámicamente -->
@@ -62,16 +62,17 @@
             android:layout_height="wrap_content"
             android:text="Orientación Territorial"
             android:textStyle="bold"
-            android:textColor="@color/purple_primary"
+            android:textColor="#6C5CE7"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/tvSoporte"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Soporte..."
             android:textSize="14sp"
+            android:textColor="#6B657D"
             android:layout_marginBottom="16dp"/>
 
         <TextView
@@ -79,15 +80,16 @@
             android:layout_height="wrap_content"
             android:text="Cuándo consultar:"
             android:textStyle="bold"
-            android:textColor="@color/red_panic"
+            android:textColor="#E84393"
             android:layout_marginBottom="4dp"/>
 
         <TextView
             android:id="@+id/tvCuandoConsultar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cuando..."
             android:textSize="14sp"
+            android:textColor="#6B657D"
             android:layout_marginBottom="32dp"/>
 
     </LinearLayout>

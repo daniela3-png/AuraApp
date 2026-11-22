@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
-
 android {
     namespace = "com.aura.aura"
     compileSdk {
@@ -46,4 +46,6 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("net.zetetic:android-database-sqlcipher:4.5.4")
     implementation("androidx.sqlite:sqlite:2.4.0")
+    implementation(platform("com.google.firebase:firebase-bom:35.2.0"))
+    implementation("com.google.firebase:firebase-database")
 }
